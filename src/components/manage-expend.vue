@@ -1,0 +1,12 @@
+<template>
+  <div>manage-expend</div>
+</template>
+<script>
+export default {
+  data () {
+    return {}
+  }
+}
+</script>
+<style>
+</style>
