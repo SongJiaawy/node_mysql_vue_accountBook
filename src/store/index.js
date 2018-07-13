@@ -17,6 +17,7 @@ const state = {
   timeValue: [new Date(), new Date(new Date().getTime() + 60 * 60 * 24 * 1000)],
   myAccountList: [],
   incomeData: [],
+  expendData: [],
   username: ''
 }
 export default new Vuex.Store({

@@ -1,11 +1,11 @@
 <template>
   <div>
     <Button type="primary" style="margin: 30px 7px" @click="addClick=true"><Icon type="plus-round"></Icon> 有新收入啦！</Button>
-    <Table :columns="incomeColumns" border :data="incomeData" @on-selection-change="selectionChange"></Table>
+    <Table :columns="incomeColumns" border :data="incomeData"></Table>
     <Modal v-model="addClick"  @on-ok="addIncome" title="新收入记录" @on-cancel="initTableForm">
       <Row class="ModelInput">
         <Col :span="8">收入存入账户： </Col>
-        <Select v-model="account" style="width:200px" placeholder="请选择账户">
+        <Select v-model="account" style="width:200px" placeholder="请选择账户"  @on-selection-change="selectionChange">
           <Option :value="index" v-for="(account, index) in myAccountList" :key="account.index">{{account.account_name}}-{{account.account_user}}</Option>
         </Select>
       </Row>
@@ -17,7 +17,10 @@
       </Row>
       <Row  class="ModelInput">
         <Col :span="8"> 收入金额（元）：</Col>
-        <Col :span="16"><InputNumber v-model="amount" style="width: 200px"></InputNumber></Col>
+        <Col :span="16">
+          <InputNumber v-model="amount" style="width: 200px"></InputNumber>
+          <div v-show="amount<0" style="color:red">收入不能为负，请核对后重新输入</div>
+        </Col>
       </Row>
       <Row  class="ModelInput">
         <Col :span="8"> 备注：</Col>
@@ -28,6 +31,11 @@
 </template>
 <script>
 import axios from 'axios'
+let accountNameList = {
+  normal: '普通账户',
+  credit: '信用账户',
+  money_management: '理财账户'
+}
 export default {
   props: {
     type: {
@@ -36,7 +44,6 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('getMyAccountList')
   },
   data () {
     return {
@@ -67,12 +74,20 @@ export default {
         },
         {
           title: '账户类型',
-          key: 'type'
+          key: 'type',
+          render: (h, params) => {
+            return h('span',
+              accountNameList[params.row.type])
+          }
+        },
+        {
+          title: '备注',
+          key: 'description'
         }
       ],
       addClick: false,
-      account: '',
-      time: '',
+      account: 0,
+      time: new Date(),
       amount: 0,
       description: ''
     }
@@ -93,6 +108,10 @@ export default {
 
     },
     addIncome () {
+      if (!this.amount) {
+        this.$Message.error('收入不能为0！')
+        return
+      }
       let params = this.myAccountList[this.account]
       params.amount = this.amount
       params.description = this.description
@@ -107,8 +126,8 @@ export default {
       this.initTableForm()
     },
     initTableForm () {
-      this.account = ''
-      this.time = ''
+      this.account = 0
+      this.time = new Date()
       this.amount = 0
       this.description = ''
     }

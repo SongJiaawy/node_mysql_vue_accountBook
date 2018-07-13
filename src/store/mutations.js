@@ -27,6 +27,20 @@ let incomeData = (data, state) => {
   axios.get(path).then(function (res) {
     state.incomeData = res.data.data
   })
+  let listPath = `/api/account/list?type=${data.type}`
+  axios.get(listPath).then(function (res) {
+    state.myAccountList = res.data.data
+  })
+}
+let expendData = (data, state) => {
+  let path = `/api/expend/list?start=${data.start}&end=${data.end}&type=${data.type}`
+  axios.get(path).then(function (res) {
+    state.expendData = res.data.data
+  })
+  let listPath = `/api/account/list?type=${data.type}`
+  axios.get(listPath).then(function (res) {
+    state.myAccountList = res.data.data
+  })
 }
 export const wageIncome = (state, date) => {
   let params = date
@@ -42,6 +56,26 @@ export const otherIncome = (state, date) => {
   let params = date
   params.type = ''
   incomeData(params, state)
+}
+export const creditExpend = (state, date) => {
+  console.log(date)
+
+  let params = date
+  params.type = 'credit'
+  expendData(params, state)
+}
+export const accountExpend = (state, date) => {
+  console.log(date)
+
+  let params = date
+  params.type = 'normal'
+  expendData(params, state)
+}
+export const manageExpend = (state, date) => {
+  console.log(date)
+  let params = date
+  params.type = 'money_management'
+  expendData(params, state)
 }
 export const setUsername = (state, username) => {
   state.username = username

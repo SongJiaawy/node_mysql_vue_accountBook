@@ -2,22 +2,22 @@
   <div>
     <Collapse v-model="collapseValue" style="margin-top: 80px" v-if="isMain" accordion @on-change="getList">
       <Panel name="1">
-        账户余额：{{amount.grossAmount.total}}
+        账户余额：{{amount.grossAmount.total}}元
         <p slot="content">
         <Table border :columns="columns1" :data="grossAmountData"></Table>
         </p>
       </Panel>
       <Panel name="2">
-        总支出：{{amount.expend.total}}
+        总支出：{{amount.expend.total}}元
         <p slot="content">
         <p slot="content">
-        <Table border :columns="columns1" :data="expendData"></Table>
+        <Table border :columns="columns2" :data="expendData"></Table>
         </p></p>
       </Panel>
       <Panel name="3">
-        总收入：{{amount.income.total}}
+        总收入：{{amount.income.total}}元
         <p slot="content">
-        <Table border :columns="columns1" :data="incomeData"></Table>
+        <Table border :columns="columns3" :data="incomeData"></Table>
         </p>
       </Panel>
     </Collapse>
@@ -41,7 +41,39 @@ export default {
           key: 'account_name'
         },
         {
-          title: '余额',
+          title: '用户',
+          key: 'account_user'
+        },
+        {
+          title: '余额（元）',
+          key: 'total'
+        }
+      ],
+      columns2: [
+        {
+          title: '账户',
+          key: 'account_name'
+        },
+        {
+          title: '用户',
+          key: 'account_user'
+        },
+        {
+          title: '支出金额（元）',
+          key: 'total'
+        }
+      ],
+      columns3: [
+        {
+          title: '账户',
+          key: 'account_name'
+        },
+        {
+          title: '用户',
+          key: 'account_user'
+        },
+        {
+          title: '收入金额（元）',
           key: 'total'
         }
       ],
@@ -64,9 +96,11 @@ export default {
       switch (key[0]) {
         case '2':
           this.expendData = list.map((account) => {
+            console.log(this.$store.state.amount.expend.list[account.account_name + account.account_user])
             return {
               account_name: account.account_name,
-              total: this.$store.state.amount.expend.list[account.account_name] || 0
+              account_user: account.account_user,
+              total: this.$store.state.amount.expend.list[account.account_name + account.account_user] || 0
             }
           })
           break
@@ -74,7 +108,8 @@ export default {
           this.incomeData = list.map((account) => {
             return {
               account_name: account.account_name,
-              total: this.$store.state.amount.income.list[account.account_name] || 0
+              account_user: account.account_user,
+              total: this.$store.state.amount.income.list[account.account_name + account.account_user] || 0
             }
           })
           break

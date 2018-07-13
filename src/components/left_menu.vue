@@ -20,6 +20,14 @@
 </template>
 <script>
 import {sStorageSet, sStorageGet} from '../common/storage_sj'
+let routerList = {
+  '0-0': 'wageIncome',
+  '0-1': 'manageIncome',
+  '0-2': 'otherIncome',
+  '1-0': 'creditExpend',
+  '1-1': 'accountExpend',
+  '1-2': 'manageExpend'
+}
 export default {
   beforeCreate () {
     this.openNameList = []
@@ -75,6 +83,11 @@ export default {
       this.$store.dispatch('changeMain', false)
       if (name) {
         this.$router.push({name: name})
+        let start = new Date(this.$store.state.timeValue[0]).toLocaleDateString()
+        let end = new Date(this.$store.state.timeValue[1]).toLocaleDateString()
+        if (name[0] === '0' || name[0] === '1') {
+          this.$store.dispatch(routerList[name], {start: start, end: end})
+        }
       }
     }
   }

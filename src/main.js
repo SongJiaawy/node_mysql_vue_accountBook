@@ -7,16 +7,24 @@ import App from './App'
 import {router} from './router'
 import axios from 'axios'
 import store from './store'
-import {sStorageGet} from './common/storage_sj'
+import {sStorageGet, sStorageSet} from './common/storage_sj'
 
 Vue.use(iView, axios)
 axios.interceptors.request.use(function (config) {
   config.headers['x-access-token'] = sStorageGet('Token')
   return config
-}, function (error) {
+}, (error) => {
   return Promise.reject(error)
 })
-
+axios.interceptors.response.use(data => {
+  if (data.data.success === false) {
+    sStorageSet({'login': false})
+    store.dispatch('logOut', router)
+  }
+  return data
+}, error => {
+  return Promise.reject(error)
+})
 Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({

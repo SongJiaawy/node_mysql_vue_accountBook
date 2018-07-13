@@ -28,5 +28,14 @@ export const actions = {
   },
   otherIncome ({commit}, date) {
     commit('otherIncome', date)
+  },
+  creditExpend ({commit}, date) {
+    commit('creditExpend', date)
+  },
+  accountExpend ({commit}, date) {
+    commit('accountExpend', date)
+  },
+  manageExpend ({commit}, date) {
+    commit('manageExpend', date)
   }
 }

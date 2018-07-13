@@ -28,37 +28,40 @@
             <Col :span="2"><Button type="text" @click="logOut">退出</Button></Col>
           </Row>
         </Header>
-        <Content :style="{margin: '20px',background: '#fff', minHeight: '260px'}">
-          <Row style="margin-top: 30px">
-            <Col :span="2">&nbsp;</Col>
-            <Col :span="12">
-              <DatePicker style="width: 75%" type="daterange" :readonly="checkEdit" confirm  placeholder="请选择起止日期" :editable="false" format="yyyy-MM-dd" v-model="timeValueSet" @on-ok="checkTimeOk"></DatePicker>
-            </Col>
-          </Row>
-          <Row>
-            <Col :span="2">&nbsp;</Col>
-            <Col span="20">
-            &nbsp;<router-view :checkDaysMenuClick="checkDaysMenuClick"></router-view>
-            </Col>
-          </Row>
-
+        <Content :style="{overflow: 'auto'}">
+          <Layout>
+            <Content :style="{margin: '20px',paddingBottom: '20px',background: '#fff',minHeight: '500px'}">
+              <Row style="margin-top: 30px">
+                <Col :span="2">&nbsp;</Col>
+                <Col :span="12">
+                <DatePicker style="width: 75%" type="daterange" :readonly="checkEdit" confirm  placeholder="请选择起止日期" :editable="false" format="yyyy-MM-dd" v-model="timeValueSet" @on-ok="checkTimeOk"></DatePicker>
+                </Col>
+              </Row>
+              <Row>
+                <Col :span="2">&nbsp;</Col>
+                <Col span="20">
+                &nbsp;<router-view :checkDaysMenuClick="checkDaysMenuClick"></router-view>
+                </Col>
+              </Row>
+            </Content>
+            <Footer v-if="!isMain">
+              <table width="180px">
+                <tr>
+                  <td width="50%" >账户余额：</td>
+                  <td>{{amount.grossAmount.total}}</td>
+                </tr>
+                <tr>
+                  <td>总支出：</td>
+                  <td>{{amount.expend.total}}</td>
+                </tr>
+                <tr>
+                  <td>总收入：</td>
+                  <td>{{amount.income.total}}</td>
+                </tr>
+              </table>
+            </Footer>
+          </Layout>
         </Content>
-        <Footer v-if="!isMain">
-          <table width="180px">
-            <tr>
-              <td width="50%" >账户余额：</td>
-              <td>{{amount.grossAmount.total}}</td>
-            </tr>
-            <tr>
-              <td>总支出：</td>
-              <td>{{amount.expend.total}}</td>
-            </tr>
-            <tr>
-              <td>总收入：</td>
-              <td>{{amount.income.total}}</td>
-            </tr>
-          </table>
-        </Footer>
       </Layout>
     </Layout>
   </div>
@@ -71,12 +74,12 @@ export default {
     this.getInitData()
     let myTime = setTimeout(() => {
       this.logOut()
-    }, 10 * 60 * 1000)
+    }, 60 * 60 * 1000)
     let resetTime = () => {
       clearTimeout(myTime)
       myTime = setTimeout(() => {
         this.logOut()
-      }, 10 * 60 * 1000)
+      }, 60 * 60 * 1000)
     }
     document.documentElement.onkeydown = resetTime
     document.documentElement.onclick = resetTime
@@ -110,27 +113,7 @@ export default {
       }],
       dateOptions: {
 
-      },
-      columns1: [
-        {
-          title: '账户',
-          key: 'account_name'
-        },
-        {
-          title: '余额',
-          key: 'amount'
-        }
-      ],
-      data1: [
-        {
-          account_name: '北京银行',
-          amount: 18
-        },
-        {
-          account_name: '民生银行',
-          amount: 24
-        }
-      ]
+      }
     }
   },
   computed: {
@@ -186,8 +169,8 @@ export default {
     },
     checkTimeOk (time) {
       this.$store.dispatch('changeTimeValue', this.timeValueSet)
-      let start = new Date(this.timeValueSet[0])
-      let end = new Date(this.timeValueSet[1])
+      let start = new Date(this.$store.state.timeValue[0]).toLocaleDateString()
+      let end = new Date(this.$store.state.timeValue[1]).toLocaleDateString()
       this.$store.dispatch('getInitDate', {start: start, end: end})
     },
     checkHeaderMenu (name) {

@@ -17,27 +17,27 @@ let routers = [{
   }, {
     path: 'wageIncome',
     name: '0-0',
-    component: resolve => require(['@/components/wage-income.vue'], resolve)
+    component: resolve => require(['@/components/income-grid.vue'], resolve)
   }, {
     path: 'manageIncome',
     name: '0-1',
-    component: resolve => require(['@/components/manage-income.vue'], resolve)
+    component: resolve => require(['@/components/income-grid.vue'], resolve)
   }, {
     path: 'otherIncome',
     name: '0-2',
-    component: resolve => require(['@/components/other-income.vue'], resolve)
+    component: resolve => require(['@/components/income-grid.vue'], resolve)
   }, {
     path: 'creditExpend',
     name: '1-0',
-    component: resolve => require(['@/components/credit-expend.vue'], resolve)
+    component: resolve => require(['@/components/expend-grid.vue'], resolve)
   }, {
     path: 'accountExpend',
     name: '1-1',
-    component: resolve => require(['@/components/account-expend.vue'], resolve)
+    component: resolve => require(['@/components/expend-grid.vue'], resolve)
   }, {
     path: 'manageExpend',
     name: '1-2',
-    component: resolve => require(['@/components/manage-expend.vue'], resolve)
+    component: resolve => require(['@/components/expend-grid.vue'], resolve)
   }, {
     path: 'myAccount',
     name: '2',
